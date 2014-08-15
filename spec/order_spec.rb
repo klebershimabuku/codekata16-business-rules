@@ -1,9 +1,21 @@
 require './order'
+require './physical_product'
 
 describe Order do
   describe 'payment' do
+
     context 'for a physical product' do
-      it 'generates a packing slip for shipping'
+      let(:product) { PhysicalProduct.new }
+
+      let(:order) do
+        Order.new(product)
+      end
+
+      it 'generates a packing slip for shipping' do
+        expect(product).to receive(:generate_packing_slip).exactly(1).times
+        order.process!
+      end
+
       it 'generates a commission payment to the agent'
     end
 
