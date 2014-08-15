@@ -17,5 +17,6 @@ class Book < Product
   end
 
   def generate_comission_payment
+    true
   end
 end
