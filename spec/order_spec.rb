@@ -1,45 +1,53 @@
+require 'pry'
 require './order'
 require './physical_product'
 require './book'
+require './membership'
 
 describe Order do
   describe 'payment' do
 
     let(:order) do
-      Order.new(product)
+      Order.new(item)
     end
 
     context 'for a physical product' do
-      let(:product) { PhysicalProduct.new }
+      let(:item) { PhysicalProduct.new }
 
       it 'generates a packing slip for shipping' do
-        expect(product).to receive(:generate_packing_slip).exactly(1).times
+        expect(item).to receive(:generate_packing_slip).exactly(1).times
         order.process!
       end
 
       it 'generates a commission payment to the agent' do
-        expect(product).to receive(:generate_comission_payment).exactly(1).times
+        expect(item).to receive(:generate_comission_payment).exactly(1).times
         order.process!
       end
     end
 
     context 'for a book' do
-      let(:product) { Book.new }
+      let(:item) { Book.new }
 
       it 'creates a duplicate packing slip for the royalty department' do
-        expect(product).to receive(:generate_packing_slip).exactly(1).times
-        expect(product).to receive(:generate_packing_slip_for_royalty_department).exactly(1).times
+        expect(item).to receive(:generate_packing_slip).exactly(1).times
+        expect(item).to receive(:generate_packing_slip_for_royalty_department).exactly(1).times
         order.process!
       end
 
       it 'generates a commission payment to the agent' do
-        expect(product).to receive(:generate_comission_payment).exactly(1).times
+        expect(item).to receive(:generate_comission_payment).exactly(1).times
         order.process!
       end
     end
 
     context 'for a membership' do
-      it 'activates the membership'
+      let(:item) { Membership.new }
+
+      it 'activates the membership' do
+        expect(item.active?).to eq(false)
+        order.process!
+        expect(item.active?).to eq(true)
+      end
     end
 
     context 'for an upgrade to a membership' do

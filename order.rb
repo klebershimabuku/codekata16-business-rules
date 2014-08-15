@@ -1,9 +1,9 @@
 class Order
-  def initialize(product)
-    @product = product
+  def initialize(item)
+    @item = item
   end
 
   def process!
-    @product.process!
+    @item.process!
   end
 end
