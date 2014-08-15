@@ -32,7 +32,10 @@ describe Order do
         order.process!
       end
 
-      it 'generates a commission payment to the agent'
+      it 'generates a commission payment to the agent' do
+        expect(product).to receive(:generate_comission_payment).exactly(1).times
+        order.process!
+      end
     end
 
     context 'for a membership' do
