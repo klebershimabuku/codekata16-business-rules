@@ -1,5 +1,7 @@
 class Product
-  def process!
-    raise 'you should not use this class'
+  def process!(*actions)
+    actions.flatten.each do |action|
+      self.send(action.to_sym)
+    end
   end
 end

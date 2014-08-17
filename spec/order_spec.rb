@@ -8,11 +8,16 @@ describe Order do
   describe 'payment' do
 
     let(:order) do
-      Order.new(item)
+      Order.new(item, actions)
     end
 
     context 'for a physical product' do
       let(:item) { PhysicalProduct.new }
+
+      let(:actions) do
+        [:generate_packing_slip,
+         :generate_comission_payment]
+      end
 
       it 'generates a packing slip for shipping' do
         expect(item).to receive(:generate_packing_slip).exactly(1).times
@@ -27,6 +32,12 @@ describe Order do
 
     context 'for a book' do
       let(:item) { Book.new }
+
+      let(:actions) do
+        [:generate_packing_slip,
+        :generate_packing_slip_for_royalty_department,
+        :generate_comission_payment]
+      end
 
       it 'creates a duplicate packing slip for the royalty department' do
         expect(item).to receive(:generate_packing_slip).exactly(1).times
@@ -43,6 +54,8 @@ describe Order do
     context 'for a membership' do
       let(:item) { Membership.new }
 
+      let(:actions) { :activate_membership }
+
       it 'activates the membership' do
         expect(item.active?).to eq(false)
         order.process!
@@ -51,7 +64,15 @@ describe Order do
     end
 
     context 'for an upgrade to a membership' do
-      it 'applies the upgrade'
+      let(:item) { Membership.new }
+
+      let(:actions) { :upgrade_membership }
+
+      it 'applies the upgrade' do
+        expect(item.plan).to eq(:free)
+        order.process!
+        expect(item.plan).to eq(:premium)
+      end
     end
 
     context "for the video 'learning to ski'" do

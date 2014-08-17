@@ -1,18 +1,22 @@
-class Membership
+require './product'
+
+class Membership < Product
+  attr_reader :plan
+
   def initialize
     @status = 'inactive'
-  end
-
-  def process!
-    activate
+    @plan = :free
   end
 
   def active?
     @status == 'activated'
   end
 
-  protected
-  def activate
+  def activate_membership
     @status = 'activated'
+  end
+
+  def upgrade_membership
+    @plan = :premium if @plan = :free
   end
 end
