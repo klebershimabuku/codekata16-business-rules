@@ -62,6 +62,13 @@ describe Order do
         order.process!
         expect(item.active?).to eq(true)
       end
+
+      it 'sends an e-mail to the owner and inform of the activation' do
+        expect(item.active?).to eq(false)
+        expect(item).to receive(:notify_owner_for_activation).exactly(1).times
+        order.process!
+        expect(item.active?).to eq(true)
+      end
     end
 
     context 'for an upgrade to a membership' do
