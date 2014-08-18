@@ -3,6 +3,7 @@ require './order'
 require './physical_product'
 require './book'
 require './membership'
+require './video'
 
 describe Order do
   describe 'payment' do
@@ -76,7 +77,13 @@ describe Order do
     end
 
     context "for the video 'learning to ski'" do
-      it "adds a free 'First Aid' video to the packing slip"
+      let(:item) { Video.new('Learning to Ski', 45.0) }
+      let(:actions) { :add }
+
+      it "adds a free 'First Aid' video to the packing slip" do
+        expect(item).to receive(:add_free_videos).exactly(1).times
+        order.process!
+      end
     end
   end
 end
