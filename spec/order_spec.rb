@@ -81,6 +81,12 @@ describe Order do
         order.process!
         expect(item.plan).to eq(:premium)
       end
+      it 'applies the upgrade' do
+        expect(item).to receive(:notify_owner_for_upgrade).exactly(1).times
+        expect(item.plan).to eq(:free)
+        order.process!
+        expect(item.plan).to eq(:premium)
+      end
     end
 
     context "for the video 'learning to ski'" do

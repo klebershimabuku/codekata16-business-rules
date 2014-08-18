@@ -19,9 +19,13 @@ class Membership < Product
 
   def upgrade_membership
     @plan = :premium if @plan = :free
+    notify_owner_for_upgrade
   end
 
   protected
   def notify_owner_for_activation
+  end
+
+  def notify_owner_for_upgrade
   end
 end
